@@ -12,18 +12,18 @@ namespace DiGi.AssemblyResolver.Classes
     public sealed class AssemblyResolver
     {
         private readonly object gate = new();
-        
+
         private readonly List<string> managedDirectories = [];
         private readonly List<string> nativeDirectories = [];
-        
+
         private readonly Dictionary<string, AssemblyName> redirects = new(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<string> resolving = new(StringComparer.OrdinalIgnoreCase);
-        
+
         private bool enabled;
-        
+
         public void AddManagedDirectory(string? directory)
         {
-            if(string.IsNullOrWhiteSpace(directory))
+            if (string.IsNullOrWhiteSpace(directory))
             {
                 return;
             }
@@ -102,7 +102,7 @@ namespace DiGi.AssemblyResolver.Classes
                 enabled = true;
             }
         }
-        
+
         private void AddManagedDirectory_NoLock(string directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
@@ -242,7 +242,7 @@ namespace DiGi.AssemblyResolver.Classes
 
             return IntPtr.Zero;
         }
-        
+
         private string? TryFindManaged(AssemblyName assemblyName)
         {
             string name = assemblyName.Name ?? string.Empty;
@@ -295,7 +295,6 @@ namespace DiGi.AssemblyResolver.Classes
                 }
                 catch
                 {
-
                 }
             }
             return null;
