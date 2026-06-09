@@ -9,6 +9,10 @@ using System.Runtime.Loader;
 
 namespace DiGi.AssemblyResolver.Classes
 {
+    /// <summary>
+    /// Provides functionality to resolve managed and native assembly dependencies at runtime 
+    /// by hooking into the .NET AssemblyLoadContext resolving events.
+    /// </summary>
     public sealed class AssemblyResolver
     {
         private readonly object gate = new();
@@ -21,6 +25,10 @@ namespace DiGi.AssemblyResolver.Classes
 
         private bool enabled;
 
+        /// <summary>
+        /// Adds a directory to the list of paths searched for managed assemblies.
+        /// </summary>
+        /// <param name="directory">The path to the directory containing managed assemblies.</param>
         public void AddManagedDirectory(string? directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
@@ -31,6 +39,10 @@ namespace DiGi.AssemblyResolver.Classes
             lock (gate) AddManagedDirectory_NoLock(directory);
         }
 
+        /// <summary>
+        /// Adds a directory to the list of paths searched for native assemblies.
+        /// </summary>
+        /// <param name="directory">The path to the directory containing native assemblies.</param>
         public void AddNativeDirectory(string? directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
@@ -41,6 +53,11 @@ namespace DiGi.AssemblyResolver.Classes
             lock (gate) AddNativeDirectory_NoLock(directory);
         }
 
+        /// <summary>
+        /// Adds a redirect that maps a requested assembly name to a specific full assembly name.
+        /// </summary>
+        /// <param name="name">The simple name of the assembly to be redirected.</param>
+        /// <param name="fullAssemblyName">The full assembly name string used for the redirection target.</param>
         public void AddRedirect(string? name, string? fullAssemblyName)
         {
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(fullAssemblyName))
@@ -51,6 +68,9 @@ namespace DiGi.AssemblyResolver.Classes
             lock (gate) redirects[name] = new AssemblyName(fullAssemblyName);
         }
 
+        /// <summary>
+        /// Disables the assembly resolver and unhooks from the runtime resolving events.
+        /// </summary>
         public void Disable()
         {
             lock (gate)
@@ -67,6 +87,11 @@ namespace DiGi.AssemblyResolver.Classes
             }
         }
 
+        /// <summary>
+        /// Enables the assembly resolver and hooks into the runtime resolving events.
+        /// </summary>
+        /// <param name="managedDirectories">An optional collection of directories to search for managed assemblies.</param>
+        /// <param name="nativeDirectories">An optional collection of directories to search for native assemblies.</param>
         public void Enable(IEnumerable<string>? managedDirectories = null, IEnumerable<string>? nativeDirectories = null)
         {
             lock (gate)
