@@ -1,3 +1,5 @@
+#### [DiGi\.AssemblyResolver](DiGi.AssemblyResolver.Overview.md 'DiGi\.AssemblyResolver\.Overview')
+
 ## DiGi\.AssemblyResolver\.Classes Namespace
 ### Classes
 
